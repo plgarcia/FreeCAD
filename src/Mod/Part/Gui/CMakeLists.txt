@@ -222,6 +222,8 @@ SET(PartGui_SRCS
     ViewProviderPython.h
     ViewProviderBoolean.cpp
     ViewProviderBoolean.h
+    ViewProviderMultiPart.cpp
+    ViewProviderMultiPart.h
     ViewProviderRuledSurface.cpp
     ViewProviderRuledSurface.h
     Workbench.cpp

@@ -45,7 +45,7 @@ protected:
     //@}
 };
 
-class MultiCommon : public Part::Feature
+class MultiCommon : public Part::FeatureMultiPart
 {
     PROPERTY_HEADER(Part::MultiCommon);
 
@@ -53,7 +53,6 @@ public:
     MultiCommon();
 
     App::PropertyLinkList Shapes;
-    PropertyShapeHistory History;
     App::PropertyBool Refine;
 
     /** @name methods override feature */
@@ -66,6 +65,7 @@ public:
     const char* getViewProviderName(void) const {
         return "PartGui::ViewProviderMultiCommon";
     }
+	virtual std::vector<App::DocumentObject*> getChildrens(void) const;
 
 };
 

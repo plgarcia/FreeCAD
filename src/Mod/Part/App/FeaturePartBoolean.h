@@ -26,13 +26,14 @@
 
 #include <App/PropertyLinks.h>
 #include "PartFeature.h"
+#include "FeatureMultiPart.h"
 
 class BRepAlgoAPI_BooleanOperation;
 
 namespace Part
 {
 
-class Boolean : public Part::Feature
+class Boolean : public Part::FeatureMultiPart
 {
     PROPERTY_HEADER(Part::Boolean);
 
@@ -41,7 +42,7 @@ public:
 
     App::PropertyLink Base;
     App::PropertyLink Tool;
-    PropertyShapeHistory History;
+
     App::PropertyBool Refine;
 
     /** @name methods override Feature */
@@ -55,6 +56,7 @@ public:
     const char* getViewProviderName(void) const {
         return "PartGui::ViewProviderBoolean";
     }
+	virtual std::vector<App::DocumentObject*> getChildrens(void) const;
 
 protected:
     virtual BRepAlgoAPI_BooleanOperation* makeOperation(const TopoDS_Shape&, const TopoDS_Shape&) const = 0;

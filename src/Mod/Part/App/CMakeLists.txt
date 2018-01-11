@@ -121,6 +121,8 @@ SET(Features_SRCS
     FeaturePartCut.h
     FeaturePartFuse.cpp
     FeaturePartFuse.h
+    FeatureMultiPart.cpp
+    FeatureMultiPart.h
     FeaturePartImportBrep.cpp
     FeaturePartImportBrep.h
     FeaturePartImportIges.cpp

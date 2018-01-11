@@ -86,6 +86,10 @@ public:
     /** @name Edit methods */
     //@{
     virtual void showBoundingBox(bool);
+	virtual void updateColor(const App::Color& c);
+
+	virtual void updateTransparency(float trans);
+
     //@}
 
 protected:

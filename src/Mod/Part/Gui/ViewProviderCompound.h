@@ -25,11 +25,12 @@
 #define PARTGUI_VIEWPROVIDERCOMPOUND_H
 
 #include "ViewProvider.h"
+#include "ViewProviderMultiPart.h"
 
 
 namespace PartGui {
 
-class PartGuiExport ViewProviderCompound : public ViewProviderPart
+class PartGuiExport ViewProviderCompound : public ViewProviderMultiPart
 {
     PROPERTY_HEADER(PartGui::ViewProviderCompound);
 
@@ -38,7 +39,6 @@ public:
     ViewProviderCompound();
     /// destructor
     virtual ~ViewProviderCompound();
-    std::vector<App::DocumentObject*> claimChildren() const;
     bool onDelete(const std::vector<std::string> &);
 
     /// drag and drop
@@ -49,8 +49,6 @@ public:
     bool canDropObject(App::DocumentObject*) const;
     void dropObject(App::DocumentObject*);
 
-protected:
-    void updateData(const App::Property*);
 };
 
 } // namespace PartGui

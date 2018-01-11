@@ -201,3 +201,7 @@ App::DocumentObjectExecReturn *MultiCommon::execute(void)
 
     return App::DocumentObject::StdReturn;
 }
+
+std::vector<App::DocumentObject*> MultiCommon::getChildrens(void) const {
+	return Shapes.getValues();
+}

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2013 Werner Mayer <wmayer[at]users.sourceforge.net>     *
+ *   Copyright (c) 2007 Werner Mayer <wmayer[at]users.sourceforge.net>     *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -21,41 +21,37 @@
  ***************************************************************************/
 
 
-#ifndef PART_FEATURECOMPOUND_H
-#define PART_FEATURECOMPOUND_H
+#include "PreCompiled.h"
+#ifndef _PreComp_
+# include <BRepAlgoAPI_Fuse.hxx>
+# include <BRepCheck_Analyzer.hxx>
+# include <Standard_Failure.hxx>
+# include <TopoDS_Iterator.hxx>
+# include <TopTools_IndexedMapOfShape.hxx>
+# include <TopExp.hxx>
+#endif
 
-#include <App/PropertyLinks.h>
-#include "PartFeature.h"
+
 #include "FeatureMultiPart.h"
+#include "modelRefine.h"
+#include <App/Application.h>
+#include <Base/Parameter.h>
+#include <Base/Exception.h>
 
-namespace Part
+using namespace Part;
+
+
+FeatureMultiPart::FeatureMultiPart ()
 {
-
-class Compound : public Part::FeatureMultiPart
-{
-    PROPERTY_HEADER(Part::Compound);
-
-public:
-    Compound();
-    virtual ~Compound();
-
-    App::PropertyLinkList Links;
-
-    /** @name methods override feature */
-    //@{
-    short mustExecute() const;
-    /// recalculate the feature
-    App::DocumentObjectExecReturn *execute(void);
-    /// returns the type name of the view provider
-    const char* getViewProviderName(void) const {
-        return "PartGui::ViewProviderCompound";
-    }
-	virtual std::vector<App::DocumentObject*> getChildrens(void) const;
-    //@}
-};
-
-} //namespace Part
+	
+}
 
 
-#endif // PART_FEATURECOMPOUND_H
-
+// FeatureMultiPart::FeatureMultiPart (const char* name)
+// {
+    // ADD_PROPERTY(Shapes,(0));
+    // Shapes.setSize(0);
+    // ADD_PROPERTY_TYPE(History,(ShapeHistory()), name, (App::PropertyType)
+        // (App::Prop_Output|App::Prop_Transient|App::Prop_Hidden), "Shape history");
+    // History.setSize(0);
+// }

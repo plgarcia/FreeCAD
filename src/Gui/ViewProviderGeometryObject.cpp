@@ -111,11 +111,20 @@ ViewProviderGeometryObject::~ViewProviderGeometryObject()
     pcBoundingBox->unref();
 }
 
+void ViewProviderGeometryObject::updateColor(const App::Color& c) {
+    ShapeMaterial.setDiffuseColor(c);
+}
+
+void ViewProviderGeometryObject::updateTransparency(float trans) {
+            ShapeMaterial.setTransparency(trans);
+}
+
 void ViewProviderGeometryObject::onChanged(const App::Property* prop)
 {
     // Actually, the properties 'ShapeColor' and 'Transparency' are part of the property 'ShapeMaterial'.
     // Both redundant properties are kept due to more convenience for the user. But we must keep the values
     // consistent of all these properties.
+	
     if (prop == &Selectable) {
         bool Sel = Selectable.getValue();
         setSelectable(Sel);
@@ -124,7 +133,7 @@ void ViewProviderGeometryObject::onChanged(const App::Property* prop)
         const App::Color& c = ShapeColor.getValue();
         pcShapeMaterial->diffuseColor.setValue(c.r,c.g,c.b);
         if (c != ShapeMaterial.getValue().diffuseColor)
-        ShapeMaterial.setDiffuseColor(c);
+			updateColor(c);
     }
     else if (prop == &Transparency) {
         const App::Material& Mat = ShapeMaterial.getValue();
@@ -132,7 +141,7 @@ void ViewProviderGeometryObject::onChanged(const App::Property* prop)
         if (value != Transparency.getValue()) {
             float trans = Transparency.getValue()/100.0f;
             pcShapeMaterial->transparency = trans;
-            ShapeMaterial.setTransparency(trans);
+			updateTransparency(trans);
         }
     }
     else if (prop == &ShapeMaterial) {

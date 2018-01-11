@@ -25,11 +25,13 @@
 #define PARTGUI_VIEWPROVIDERMIRROR_H
 
 #include <Mod/Part/Gui/ViewProvider.h>
+#include "ViewProviderMultiPart.h"
+
 
 namespace PartGui {
 
 
-class PartGuiExport ViewProviderMirror : public ViewProviderPart
+class PartGuiExport ViewProviderMirror : public ViewProviderMultiPart
 {
     PROPERTY_HEADER(PartGui::ViewProviderMirror);
 
@@ -56,7 +58,7 @@ private:
     SoSeparator* pcEditNode;
 };
 
-class PartGuiExport ViewProviderFillet : public ViewProviderPart
+class PartGuiExport ViewProviderFillet : public ViewProviderMultiPart
 {
     PROPERTY_HEADER(PartGui::ViewProviderFillet);
 
@@ -70,13 +72,12 @@ public:
     bool onDelete(const std::vector<std::string> &);
 
 protected:
-    void updateData(const App::Property*);
     bool setEdit(int ModNum);
     void unsetEdit(int ModNum);
     //@}
 };
 
-class ViewProviderChamfer : public ViewProviderPart
+class ViewProviderChamfer : public ViewProviderMultiPart
 {
     PROPERTY_HEADER(PartGui::ViewProviderChamfer);
 
@@ -92,7 +93,6 @@ public:
     bool onDelete(const std::vector<std::string> &);
 
 protected:
-    void updateData(const App::Property*);
     bool setEdit(int ModNum);
     void unsetEdit(int ModNum);
     //@}

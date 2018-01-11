@@ -27,6 +27,7 @@
 #include <App/PropertyLinks.h>
 
 #include "FeaturePartBoolean.h"
+#include "FeatureMultiPart.h"
 
 namespace Part
 {
@@ -46,7 +47,7 @@ protected:
     //@}
 };
 
-class MultiFuse : public Part::Feature
+class MultiFuse : public Part::FeatureMultiPart
 {
     PROPERTY_HEADER(Part::MultiFuse);
 
@@ -54,7 +55,6 @@ public:
     MultiFuse();
 
     App::PropertyLinkList Shapes;
-    PropertyShapeHistory History;
     App::PropertyBool Refine;
 
     /** @name methods override feature */
@@ -68,6 +68,8 @@ public:
         return "PartGui::ViewProviderMultiFuse";
     }
 
+	virtual std::vector<App::DocumentObject*> getChildrens(void) const;
+	
 };
 
 }

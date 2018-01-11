@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2013 Werner Mayer <wmayer[at]users.sourceforge.net>     *
+ *   Copyright (c) 2007 Werner Mayer <wmayer[at]users.sourceforge.net>     *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -21,41 +21,30 @@
  ***************************************************************************/
 
 
-#ifndef PART_FEATURECOMPOUND_H
-#define PART_FEATURECOMPOUND_H
+#ifndef PART_FEATUREMULTIPART_H
+#define PART_FEATUREMULTIPART_H
 
 #include <App/PropertyLinks.h>
+
 #include "PartFeature.h"
-#include "FeatureMultiPart.h"
 
 namespace Part
 {
 
-class Compound : public Part::FeatureMultiPart
+
+class FeatureMultiPart : public Part::Feature
 {
-    PROPERTY_HEADER(Part::Compound);
+    //PROPERTY_HEADER(Part::MultiFuse);
 
 public:
-    Compound();
-    virtual ~Compound();
+    FeatureMultiPart();
 
-    App::PropertyLinkList Links;
+    PropertyShapeHistory History;
+	
+	virtual std::vector<App::DocumentObject*> getChildrens(void) const = 0;
 
-    /** @name methods override feature */
-    //@{
-    short mustExecute() const;
-    /// recalculate the feature
-    App::DocumentObjectExecReturn *execute(void);
-    /// returns the type name of the view provider
-    const char* getViewProviderName(void) const {
-        return "PartGui::ViewProviderCompound";
-    }
-	virtual std::vector<App::DocumentObject*> getChildrens(void) const;
-    //@}
 };
 
-} //namespace Part
+}
 
-
-#endif // PART_FEATURECOMPOUND_H
-
+#endif // PART_FEATUREMULTIPART_H

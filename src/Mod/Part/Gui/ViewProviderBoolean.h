@@ -25,11 +25,12 @@
 #define PARTGUI_ViewProviderBoolean_H
 
 #include "ViewProvider.h"
+#include "ViewProviderMultiPart.h"
 
 
 namespace PartGui {
 
-class PartGuiExport ViewProviderBoolean : public ViewProviderPart
+class PartGuiExport ViewProviderBoolean : public ViewProviderMultiPart
 {
     PROPERTY_HEADER(PartGui::ViewProviderBoolean);
 
@@ -40,14 +41,15 @@ public:
     virtual ~ViewProviderBoolean();
 
     /// grouping handling 
-    std::vector<App::DocumentObject*> claimChildren(void) const;
     QIcon getIcon(void) const;
-    void updateData(const App::Property*);
+
     bool onDelete(const std::vector<std::string> &);
 };
 
+
+
 /// ViewProvider for the MultiFuse feature
-class PartGuiExport ViewProviderMultiFuse : public ViewProviderPart
+class PartGuiExport ViewProviderMultiFuse : public ViewProviderMultiPart
 {
     PROPERTY_HEADER(PartGui::ViewProviderMultiFuse);
 
@@ -58,9 +60,7 @@ public:
     virtual ~ViewProviderMultiFuse();
 
     /// grouping handling 
-    std::vector<App::DocumentObject*> claimChildren(void) const;
     QIcon getIcon(void) const;
-    void updateData(const App::Property*);
     bool onDelete(const std::vector<std::string> &);
 
     /// drag and drop
@@ -73,7 +73,7 @@ public:
 };
 
 /// ViewProvider for the MultiFuse feature
-class PartGuiExport ViewProviderMultiCommon : public ViewProviderPart
+class PartGuiExport ViewProviderMultiCommon : public ViewProviderMultiPart
 {
     PROPERTY_HEADER(PartGui::ViewProviderMultiCommon);
 
@@ -84,17 +84,15 @@ public:
     virtual ~ViewProviderMultiCommon();
 
     /// grouping handling 
-    std::vector<App::DocumentObject*> claimChildren(void) const;
     QIcon getIcon(void) const;
-    void updateData(const App::Property*);
-    bool onDelete(const std::vector<std::string> &);
+     bool onDelete(const std::vector<std::string> &);
 
     /// drag and drop
     bool canDragObjects() const;
     bool canDragObject(App::DocumentObject*) const;
     void dragObject(App::DocumentObject*);
     bool canDropObjects() const;
-    bool canDropObject(App::DocumentObject*) const;
+    virtual bool canDropObject(App::DocumentObject*) const;
     void dropObject(App::DocumentObject*);
 };
 

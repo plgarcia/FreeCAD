@@ -227,3 +227,11 @@ App::DocumentObjectExecReturn *MultiFuse::execute(void)
 
     return App::DocumentObject::StdReturn;
 }
+
+std::vector<App::DocumentObject*> MultiFuse::getChildrens(void) const {
+	return Shapes.getValues();
+	
+}
+
+
+

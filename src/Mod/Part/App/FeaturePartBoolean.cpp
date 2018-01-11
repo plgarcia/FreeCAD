@@ -131,3 +131,10 @@ App::DocumentObjectExecReturn *Boolean::execute(void)
         return new App::DocumentObjectExecReturn("A fatal error occurred when running boolean operation");
     }
 }
+std::vector<App::DocumentObject*> Boolean::getChildrens(void) const {
+    std::vector<App::DocumentObject*> temp;
+    temp.push_back(Base.getValue());
+    temp.push_back(Tool.getValue());
+
+    return temp;
+}

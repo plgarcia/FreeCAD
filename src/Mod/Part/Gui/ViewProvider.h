@@ -53,11 +53,11 @@ public:
     virtual ~ViewProviderPart();
     virtual bool doubleClicked(void);
 
-protected:
-    void applyColor(const Part::ShapeHistory& hist,
+// protected:
+    static void applyColor(const Part::ShapeHistory& hist,
                     const std::vector<App::Color>& colBase,
                     std::vector<App::Color>& colBool);
-    void applyTransparency(const float& transparency,
+    static void applyTransparency(const float& transparency,
                     std::vector<App::Color>& colors);
 };
 

@@ -43,6 +43,9 @@ Compound::Compound()
 {
     ADD_PROPERTY(Links,(0));
     Links.setSize(0);
+    ADD_PROPERTY_TYPE(History,(ShapeHistory()), "Boolean", (App::PropertyType)
+        (App::Prop_Output|App::Prop_Transient|App::Prop_Hidden), "Shape history");
+    History.setSize(0);
 }
 
 Compound::~Compound()
@@ -92,6 +95,7 @@ App::DocumentObjectExecReturn *Compound::execute(void)
         prop.setValues(history);
         prop.setContainer(this);
         prop.touch();
+		this->History.setValues(history);
 
         return App::DocumentObject::StdReturn;
     }
@@ -100,3 +104,6 @@ App::DocumentObjectExecReturn *Compound::execute(void)
     }
 }
 
+std::vector<App::DocumentObject*> Compound::getChildrens(void) const {
+	return Links.getValues();
+}

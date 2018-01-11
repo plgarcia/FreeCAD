@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2013 Werner Mayer <wmayer[at]users.sourceforge.net>     *
+ *   Copyright (c) 2008 Werner Mayer <wmayer[at]users.sourceforge.net>     *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -21,41 +21,42 @@
  ***************************************************************************/
 
 
-#ifndef PART_FEATURECOMPOUND_H
-#define PART_FEATURECOMPOUND_H
+#ifndef PARTGUI_ViewProviderMultipart_H
+#define PARTGUI_ViewProviderMultipart_H
 
-#include <App/PropertyLinks.h>
-#include "PartFeature.h"
-#include "FeatureMultiPart.h"
+#include "ViewProvider.h"
 
-namespace Part
+
+namespace PartGui {
+
+
+/// ViewProvider for the MultiPart feature
+class  PartGuiExport ViewProviderMultiPart : public ViewProviderPart
 {
-
-class Compound : public Part::FeatureMultiPart
-{
-    PROPERTY_HEADER(Part::Compound);
-
+	
 public:
-    Compound();
-    virtual ~Compound();
+    /// constructor
+    ViewProviderMultiPart();
+    /// destructor
+    virtual ~ViewProviderMultiPart();
+	
+    void updateData(const App::Property*);
+	virtual bool useComponentsColors(void) ;
+	virtual std::vector<App::DocumentObject*> claimChildren(void) const ;
+	
+	virtual App::Color chooseMainColor(std::vector<App::DocumentObject*> sources);
+	
+	virtual void updateColor(const App::Color& c);
 
-    App::PropertyLinkList Links;
+	virtual void updateTransparency(float trans);
 
-    /** @name methods override feature */
-    //@{
-    short mustExecute() const;
-    /// recalculate the feature
-    App::DocumentObjectExecReturn *execute(void);
-    /// returns the type name of the view provider
-    const char* getViewProviderName(void) const {
-        return "PartGui::ViewProviderCompound";
-    }
-	virtual std::vector<App::DocumentObject*> getChildrens(void) const;
-    //@}
 };
+	
 
-} //namespace Part
 
 
-#endif // PART_FEATURECOMPOUND_H
 
+} // namespace PartGui
+
+
+#endif // PARTGUI_ViewProviderMultipart_H
