@@ -84,6 +84,7 @@ short MultiFuse::mustExecute() const
 
 App::DocumentObjectExecReturn *MultiFuse::execute(void)
 {
+	printf("MultiFuse::execute %s\n",Label.getValue());
     std::vector<TopoDS_Shape> s;
     std::vector<App::DocumentObject*> obj = Shapes.getValues();
 

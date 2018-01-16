@@ -42,6 +42,7 @@ public:
     PropertyShapeHistory History;
 	
 	virtual std::vector<App::DocumentObject*> getChildrens(void) const = 0;
+	virtual App::DocumentObjectExecReturn *execute(void) =0;
 
 };
 

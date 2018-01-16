@@ -72,10 +72,12 @@ void updateColors (
 	Part::FeatureMultiPart* objPart, 
 	// const std::vector<Part::ShapeHistory>& hist, 
 	App::Color shapeColor, 
-	float curTrans ) {
+	float curTrans ,
+	bool force) {
         std::vector<App::DocumentObject*> sources = view->claimChildren();
 		const std::vector<Part::ShapeHistory>& hist = objPart->History.getValues();
-        if (hist.size() != sources.size())
+		printf ("sizes %ld %ld\n",hist.size(),sources.size());
+        if (sources.size()==0)
             return;
 		
         const TopoDS_Shape& partShape = objPart->Shape.getValue();
@@ -86,45 +88,58 @@ void updateColors (
         colPart.resize(partMap.Extent(), shapeColor);
 		
 		//if (this->useComponentsColors()) {
+		printf ("ShapeColor i %x\n",shapeColor.getPackedValue());
 		if (shapeColor == 0x000000) {
-			int index=0;
-			for (std::vector<App::DocumentObject*>::iterator it = sources.begin(); it != sources.end(); ++it, ++index) {
-			   Part::Feature* objBase = dynamic_cast<Part::Feature*>(*it);
-				if (!objBase)
-					continue;
+			if (hist.size() != sources.size()) {
+				// there is no history that should be calcultated while exeuting the feaure
+				if (force) {
+					// objPart->execute();
+					return;
+				} else {
+					return;
+				}
+			} else {
 				
-				const TopoDS_Shape& baseShape = objBase->Shape.getValue();
-	 
-				TopTools_IndexedMapOfShape baseMap;
-				TopExp::MapShapes(baseShape, TopAbs_FACE, baseMap);
+				printf("iiiii\n");
+				int index=0;
+				for (std::vector<App::DocumentObject*>::iterator it = sources.begin(); it != sources.end(); ++it, ++index) {
+				   Part::Feature* objBase = dynamic_cast<Part::Feature*>(*it);
+					if (!objBase)
+						continue;
+					
+					const TopoDS_Shape& baseShape = objBase->Shape.getValue();
+		 
+					TopTools_IndexedMapOfShape baseMap;
+					TopExp::MapShapes(baseShape, TopAbs_FACE, baseMap);
 
-				Gui::ViewProvider* vpBase = Gui::Application::Instance->getViewProvider(objBase);
-				if (vpBase) {
-					std::vector<App::Color> colBase = static_cast<PartGui::ViewProviderPart*>(vpBase)->DiffuseColor.getValues();
-					PartGui::ViewProviderPart::applyTransparency(chooseTransparancy(curTrans, static_cast<PartGui::ViewProviderPart*>(vpBase)->Transparency.getValue()),colBase);
-					if (static_cast<int>(colBase.size()) == baseMap.Extent()) {
-						PartGui::ViewProviderPart::applyColor(hist[index], colBase, colPart);
-					}
-					else if (!colBase.empty() && colBase[0] != shapeColor) {
-						colBase.resize(baseMap.Extent(), colBase[0]);
-						PartGui::ViewProviderPart::applyColor(hist[index], colBase, colPart);
+					Gui::ViewProvider* vpBase = Gui::Application::Instance->getViewProvider(objBase);
+					if (vpBase) {
+						std::vector<App::Color> colBase = static_cast<PartGui::ViewProviderPart*>(vpBase)->DiffuseColor.getValues();
+						PartGui::ViewProviderPart::applyTransparency(chooseTransparancy(curTrans, static_cast<PartGui::ViewProviderPart*>(vpBase)->Transparency.getValue()),colBase);
+						if (static_cast<int>(colBase.size()) == baseMap.Extent()) {
+							PartGui::ViewProviderPart::applyColor(hist[index], colBase, colPart);
+						}
+						else if (!colBase.empty() && colBase[0] != shapeColor) {
+							colBase.resize(baseMap.Extent(), colBase[0]);
+							PartGui::ViewProviderPart::applyColor(hist[index], colBase, colPart);
+						}
 					}
 				}
 			}
-			view->DiffuseColor.setValues(colPart);
 		}
+		view->DiffuseColor.setValues(colPart);
 	
 }
 void ViewProviderMultiPart::updateColor(const App::Color& c) {
-		ShapeMaterial.setDiffuseColor(c);
-        Part::FeatureMultiPart* objPart = static_cast<Part::FeatureMultiPart*>(getObject());
-		updateColors(this, objPart,  this->ShapeColor.getValue() /*this->chooseMainColor(sources)*/, this->Transparency.getValue());
+	Part::FeatureMultiPart* objPart = static_cast<Part::FeatureMultiPart*>(getObject());
+	printf("ViewProviderMultiPart::updateColor %x %s\n", c.getPackedValue(),objPart->Label.getValue());
+	// printf("ViewProviderMultiPart::updateColor %s %x\n", getName(),c);
+	updateColors(this, objPart,  c /*this->chooseMainColor(sources)*/, this->Transparency.getValue(), true);
 }
 
 void ViewProviderMultiPart::updateTransparency(float trans) {
-	ShapeMaterial.setTransparency(trans);
-        Part::FeatureMultiPart* objPart = static_cast<Part::FeatureMultiPart*>(getObject());
-		updateColors(this, objPart,  this->ShapeColor.getValue() /*this->chooseMainColor(sources)*/, this->Transparency.getValue());
+	Part::FeatureMultiPart* objPart = static_cast<Part::FeatureMultiPart*>(getObject());
+	updateColors(this, objPart,  this->ShapeColor.getValue() , trans, true);
 }
 
 void ViewProviderMultiPart::updateData(const App::Property* prop)
@@ -138,7 +153,7 @@ void ViewProviderMultiPart::updateData(const App::Property* prop)
             return;
 		
 		// updateColors(this, objPart, hist, this->ShapeColor.getValue() /*this->chooseMainColor(sources)*/, this->Transparency.getValue());
-		updateColors(this, objPart,  this->ShapeColor.getValue() /*this->chooseMainColor(sources)*/, this->Transparency.getValue());
+		updateColors(this, objPart,  this->ShapeColor.getValue() , this->Transparency.getValue(), false);
 
     }
     else if (prop->getTypeId().isDerivedFrom(App::PropertyLinkList::getClassTypeId())) {
